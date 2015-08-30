@@ -1,0 +1,6 @@
+{
+  "dev": {
+    "backend_config": "sqlite://foo.db",
+    "backend_index": "INTERNAL"
+  }
+}
