@@ -1,13 +1,13 @@
 {
-  "name": "fcrunch-service-api",
+  "name": "trove-api",
   "version": "0.0.1",
-  "description": "fCrunch API Service",
+  "description": "Trove API Service",
   "main": "app.js",
   "scripts": {
     "start": "grunt coffee && node build/app.js",
     "test": "grunt coffee && mocha --recursive build/test"
   },
-  "author": "Heath Technical Services",
+  "author": "heathtechnical",
   "license": "BSD",
   "devDependencies": {
     "grunt": "~0.4.5",
@@ -23,6 +23,7 @@
     "sequelize": "latest",
     "pg-hstore": "~2.3.2",
     "pg": "~4.4.0",
-    "sqlite3": "~3.0.10"
+    "sqlite3": "~3.0.10",
+    "sequelize-cli": "~1.8.3"
   }
 }

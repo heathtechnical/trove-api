@@ -13,8 +13,6 @@
 
   Sequelize = require('sequelize');
 
-  console.log(config);
-
   sequelize = new Sequelize(config.backend_config, {
     logging: false
   });

@@ -1,7 +1,5 @@
 (function() {
-  var User, assert, bob, should;
-
-  assert = require('assert');
+  var User, bob, should;
 
   should = require('should');
 
@@ -12,17 +10,15 @@
     password: 'foo'
   });
 
-  describe('User', function() {
+  describe('Model: User', function() {
     before(function() {
       return User.sync({
         force: true
-      }).then(function() {
-        return console.log("Done");
       });
     });
     describe('Username', function() {
       it('should be set', function() {
-        return assert.equal(bob.username, 'bob');
+        return bob.username.should.equal('bob');
       });
       return it('should not be null', function() {
         bob.username = null;
@@ -33,17 +29,33 @@
     });
     describe('Password', function() {
       it('should not be plaintext', function() {
-        return assert.notEqual(bob.password, 'foo');
+        return bob.password.should.not.equal('foo');
       });
       return it('should be encrypted', function() {
-        return assert.equal(bob.encryptPassword('foo'), bob.password);
+        return bob.encryptPassword('foo').should.equal(bob.password);
       });
     });
-    return describe('Save', function() {
-      return it('should work', function() {
-        bob.username = '';
+    return describe('Database CRUD', function() {
+      it('should create ok', function() {
+        bob.username = 'bob';
+        bob.password = 'foo';
         return bob.save().then(function(user) {
           return should.exist(user);
+        });
+      });
+      it('should read ok', function() {
+        return User.findOne({
+          where: {
+            username: 'bob'
+          }
+        }).then(function(bob) {
+          return should.exist(bob);
+        });
+      });
+      return it('should update ok', function() {
+        bob.username = 'brian';
+        return bob.save().then(function(user) {
+          return user.username.should.equal('brian');
         });
       });
     });

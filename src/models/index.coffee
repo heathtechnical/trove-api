@@ -6,10 +6,6 @@ env = process.env.NODE_ENV || 'dev'
 config = require(__dirname + '/../../config/config.json')[env]
 Sequelize = require 'sequelize'
 
-console.log config
-
-#sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost/postgres', { logging: false } )
-#sequelize = new Sequelize(null, null, null, { dialect: 'sqlite', storage: 'foo.db', logging: false } )
 sequelize = new Sequelize(config.backend_config, { logging: false })
 db = {}
 

@@ -1,5 +1,7 @@
 (function() {
-  var routes;
+  var pkg, routes;
+
+  pkg = require(__dirname + '/../../../package.json');
 
   routes = {
     '/': {
@@ -11,8 +13,8 @@
           });
         }
         return res.json({
-          name: 'fCrunch',
-          version: '0.0.1'
+          name: pkg.description,
+          version: pkg.version
         });
       }
     }

@@ -1,6 +1,6 @@
 {
   "dev": {
-    "backend_config": "sqlite://foo.db",
+    "backend_config": "sqlite://trove.db",
     "backend_index": "INTERNAL"
   }
 }

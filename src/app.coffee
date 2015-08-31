@@ -1,11 +1,12 @@
 express = require 'express'
-app = express()
+fs = require 'fs'
 bodyParser = require 'body-parser'
 passport = require 'passport'
 BasicStrategy = require('passport-http').BasicStrategy
-fs = require 'fs'
+User = require('./models').User
 
-console.log "Trove API Service"
+# Define express app
+app = express()
 
 # Setup middleware
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -14,13 +15,18 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 
 passport.use new BasicStrategy(
-  (username, password, callback) ->
-    return callback(null, { username: username, is_user: "no" })
+  (username, password, done) ->
+    User.findOne({ where: { username: username } }).then((user) ->
+      return done(null, false) if !user
+      return done(null, false) if user.encryptPassword(password) != user.password
+      return done(null, user)
+    )
 )
 
 global_router = express.Router()
 
 # Load modules & register controllers
+console.log "Trove API Service"
 console.log 'Loading modules:'
 fs.readdirSync('./build/modules').forEach (file) ->
   console.log '  -> ' + file + ' routes:'

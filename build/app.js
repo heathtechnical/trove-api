@@ -1,9 +1,9 @@
 (function() {
-  var BasicStrategy, app, bodyParser, express, fs, global_router, passport;
+  var BasicStrategy, User, app, bodyParser, express, fs, global_router, passport;
 
   express = require('express');
 
-  app = express();
+  fs = require('fs');
 
   bodyParser = require('body-parser');
 
@@ -11,9 +11,9 @@
 
   BasicStrategy = require('passport-http').BasicStrategy;
 
-  fs = require('fs');
+  User = require('./models').User;
 
-  console.log("Trove API Service");
+  app = express();
 
   app.use(bodyParser.urlencoded({
     extended: true
@@ -23,14 +23,25 @@
 
   app.use(passport.initialize());
 
-  passport.use(new BasicStrategy(function(username, password, callback) {
-    return callback(null, {
-      username: username,
-      is_user: "no"
+  passport.use(new BasicStrategy(function(username, password, done) {
+    return User.findOne({
+      where: {
+        username: username
+      }
+    }).then(function(user) {
+      if (!user) {
+        return done(null, false);
+      }
+      if (user.encryptPassword(password) !== user.password) {
+        return done(null, false);
+      }
+      return done(null, user);
     });
   }));
 
   global_router = express.Router();
+
+  console.log("Trove API Service");
 
   console.log('Loading modules:');
 
