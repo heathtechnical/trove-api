@@ -65,57 +65,6 @@ router.post('/_auth', function(req, res, next) {
             return success({ type: 'USER' });
         });
     }
-
-
-/*    var username = req.body.username;
-    var password = req.body.password;
-    var handle = req.body.handle;
-
-    var auth_error = function(message){
-    };
-
-    if(!(username && password) && !handle){
-        return auth_error("Username/password parameters not supplied");
-    }
-
-    if(handle){
-        models.Peer.findOne({ where: { handle: handle }}).then(function(peer){
-            if(!peer){
-                models.Peer.upsert({ handle: handle, type: 'AGENT', disabled: true })
-                return res.json({ registration: "pending" });
-            }
-
-            if(peer.disabled){
-                return res.json({ registration: "pending" });
-            }
-
-            // Generate token and return
-            var token = jwt.sign({
-                type   : 'AGENT',
-                handle : handle
-            }, config.token_secret);
-
-            res.json({ token: token });
-        });
-    }
-
-    // TODO: Implement proper auth w/ app secret
-    models.User.find({ where: { username: username } }).then(function(result){
-        if(!result){
-            return auth_error("Incorrect username/password supplied");
-	}
-
-        // Generate token and return
-        var token = jwt.sign({
-            type     : 'USER',
-            username : username
-        }, config.token_secret);
-
-        res.json({ token: token });
-
-    }).catch(function(error){
-        return auth_error("Database error");
-    });*/
 });
 
 router.get('/', express_jwt({ secret: config.token_secret }), function(req, res) {
