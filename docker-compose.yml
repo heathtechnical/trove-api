@@ -1,0 +1,14 @@
+api:
+  image: node
+  volumes: 
+   - .:/code
+  working_dir: /code
+  command: node_modules/.bin/nodemon /code/server.js
+  ports: 
+    - "3000:3000"
+  links:
+    - db
+db:
+  image: postgres
+index:
+  image: elasticsearch
