@@ -48,7 +48,7 @@ router.post('/_auth', function(req, res, next) {
         var handle = req.body.handle;
 
         // Authenticate agent
-        models.Peer.findOrCreate({ where: { handle: handle }, defaults: { type: 'AGENT', disabled: true } })
+        models.Peer.findOrCreate({ where: { handle: handle }, defaults: { type: 'AGENT', disabled: true, host: req.connection.remoteAddress } })
         .spread(function(peer, created){
             if(peer.disabled){
                 return res.json({ disabled: true, peer: peer });
