@@ -31,11 +31,13 @@ router.post('/_auth', function(req, res, next) {
 
     var token = {};
 
+    // Define common success function
     var success = function(token){
         token = jwt.sign(token, config.token_secret);
         return res.json({ token: token });
     };
 
+    // Define common error function
     var error = function(message){
         var e = new Error("Authentication error: " + message);
         e.status = 401;
@@ -45,6 +47,7 @@ router.post('/_auth', function(req, res, next) {
     if(type == "agent"){
         var handle = req.body.handle;
 
+        // Authenticate agent
         models.Peer.findOrCreate({ where: { handle: handle }, defaults: { type: 'AGENT', disabled: true } })
         .spread(function(peer, created){
             if(peer.disabled){
@@ -59,6 +62,8 @@ router.post('/_auth', function(req, res, next) {
 
         if(!(username && password)) return error("Parameters username and password are required");
 
+        // Authenticte client
+        // TODO: Implement real authentication
         models.User.findOne({ where: { username: username } }).then(function(user){
             if(!user) return error("Invalid username/password");
 
