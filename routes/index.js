@@ -10,6 +10,7 @@ var env         = process.env.NODE_ENV || 'development',
 
 /*
  * API Service Heartbeat
+ * TODO: Needs to be moved into separate module
  */
 setInterval(function() {
     models.Peer.upsert({
@@ -51,10 +52,10 @@ router.post('/_auth', function(req, res, next) {
         models.Peer.findOrCreate({ where: { handle: handle }, defaults: { type: 'AGENT', disabled: true, host: req.connection.remoteAddress } })
         .spread(function(peer, created){
             if(peer.disabled){
-                return res.json({ disabled: true, peer: peer });
+                return error("Agent access is disabled");
             }
 
-            return success({ type: 'AGENT' });
+            return success(peer);
         });
     }else if(type == "user"){
         var username = req.body.username;

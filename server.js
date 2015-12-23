@@ -4,7 +4,8 @@ var express    = require('express'),
 
 
 var root        = require('./routes/index'),
-    peer        = require('./routes/peer');
+    peer        = require('./routes/peer'),
+    path        = require('./routes/path');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,6 +14,7 @@ var port = process.env.PORT || 3000;
 
 app.use('/', root);
 app.use('/peer', peer);
+app.use('/path', path);
 
 app.use(function(err, req, res, next){
     res.status(err.status || 500);

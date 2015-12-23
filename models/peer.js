@@ -5,6 +5,12 @@ module.exports = function(sequelize, DataTypes) {
         type            : { type: DataTypes.ENUM('AGENT', 'APISERVICE') },
         heartbeat       : { type: DataTypes.DATE },
         disabled        : { type: DataTypes.BOOLEAN }
+    }, {
+        classMethods: {
+            associate: function(models){
+                Peer.belongsToMany(models.Path, { through: "PeerPath" });
+            }
+        }
     });
 
     return Peer;
