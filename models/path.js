@@ -1,11 +1,20 @@
 module.exports = function(sequelize, DataTypes) {
     var Path = sequelize.define('Path', {
-	source          : { type: DataTypes.STRING },
+        id              : { primaryKey: true, type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
+	source          : {
+            type:       DataTypes.STRING,
+            unique:     'uniqueSource'
+        },
         disabled        : { type: DataTypes.BOOLEAN }
     }, {
         classMethods: {
             associate: function(models){
-                Path.belongsToMany(models.Peer, { through: "PeerPath" });
+                Path.belongsTo(models.Peer, { 
+                    foreignKey: {
+                        name:   'PeerId',
+                        unique: 'uniqueSource'
+                    }
+                });
             }
         }
     });
