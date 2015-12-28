@@ -72,7 +72,7 @@ router.get('/:id/metrics', function(req, res, next) {
     var sql = 'SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY name ORDER BY "createdAt" DESC) AS r, t.* FROM "PathMetrics" t) x WHERE x.r = 1;';
 
     if("interval" in req.query){
-        models.PathMetric.intervalSeries().spread(function(result, metadata) {
+        models.PathMetric.intervalSeries("fs.one", new Date('12/28/2015'), new Date(), 'second').spread(function(result, metadata) {
             return res.json(result);
         });
     }else{
