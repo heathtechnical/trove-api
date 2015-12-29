@@ -8,6 +8,8 @@ var env         = process.env.NODE_ENV || 'development',
     config      = require('../config/config.json')[env],
     models      = require('../models');
 
+require('date-util');
+
 router.use(express_jwt({ secret: config.token_secret }));
 
 router.get('/', function(req, res, next) {
@@ -71,12 +73,19 @@ router.patch('/:id', function(req, res, next) {
 router.get('/:id/metrics', function(req, res, next) {
     var sql = 'SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY name ORDER BY "createdAt" DESC) AS r, t.* FROM "PathMetrics" t) x WHERE x.r = 1;';
 
-    if("interval" in req.query){
-        models.PathMetric.intervalSeries("fs.one", new Date('12/28/2015'), new Date(), 'second').spread(function(result, metadata) {
-            return res.json(result);
-        });
-    }else{
-        models.sequelize.query(sql).spread(function(result, metadata) {
+    var type = req.query.type || 'latest';
+
+    if(type == "latest"){
+    }else if(type == "interval"){
+        var params = {};
+
+        if(req.query.start) params.start = new Date().strtotime(req.query.start);
+        if(req.query.end) params.end = new Date().strtotime(req.query.end);
+        if(req.query.interval) params.interval = req.query.interval;
+
+        console.log(params);
+
+        models.PathMetric.intervalSeries(params).spread(function(result, metadata) {
             return res.json(result);
         });
     }
