@@ -79,6 +79,8 @@ router.get('/:id/metrics', function(req, res, next) {
     }else if(type == "interval"){
         var params = {};
 
+        params.names = [ "fs.used_blocks" ];
+
         if(req.query.start) params.start = new Date().strtotime(req.query.start);
         if(req.query.end) params.end = new Date().strtotime(req.query.end);
         if(req.query.interval) params.interval = req.query.interval;
@@ -87,6 +89,8 @@ router.get('/:id/metrics', function(req, res, next) {
 
         models.PathMetric.intervalSeries(params).spread(function(result, metadata) {
             return res.json(result);
+        }).catch(function(error){
+            return res.json(error);
         });
     }
 });
