@@ -1,8 +1,5 @@
 api:
-  image: node
-  volumes: 
-   - .:/code
-  working_dir: /code
+  build: .
   command: node_modules/.bin/nodemon /code/server.js
   ports: 
     - "3000:3000"
